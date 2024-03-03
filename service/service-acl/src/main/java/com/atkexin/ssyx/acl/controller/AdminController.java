@@ -3,6 +3,7 @@ package com.atkexin.ssyx.acl.controller;
 import com.atkexin.ssyx.acl.service.AdminService;
 import com.atkexin.ssyx.acl.service.RoleService;
 import com.atkexin.ssyx.common.result.Result;
+import com.atkexin.ssyx.common.utils.MD5;
 import com.atkexin.ssyx.model.acl.Admin;
 import com.atkexin.ssyx.vo.acl.AdminQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -60,7 +61,9 @@ public class AdminController {
     @PostMapping("save")//与前端一致
     public Result save(@RequestBody Admin user) {
         //对密码进行MD5处理
-        //user.setPassword(MD5.encrypt(user.getPassword()));
+        String ps=user.getPassword();
+        String psMD5=MD5.encrypt(ps);
+        user.setPassword(psMD5);
         adminService.save(user);
         return Result.ok(null);
     }
@@ -85,7 +88,7 @@ public class AdminController {
 //    url: `${api_name}/batchRemove`,
 //    method: 'delete',
 //    data: ids
-    @ApiOperation(value = "根据id列表删除管理用户")
+    @ApiOperation(value = "批量删除管理用户")
     @DeleteMapping("batchRemove")
     public Result batchRemove(@RequestBody List<Long> idList) {
         adminService.removeByIds(idList);
