@@ -16,6 +16,9 @@
 
 #### 6Dao接口
 就是Mapper.java,添加扫描到mapper
+## SpringBoot
+### 注解
+@Repository是Spring框架中的注解，用于标注数据访问层（DAO）的类。它的作用是将数据访问层的类标识为Spring容器中的Bean对象，从而可以在其他地方方便地使用。
 ## 报错
 ### If you want an embedded database (H2, HSQL or Derby), please put it on the classpath. 
 ![img.png](img/img.png)
