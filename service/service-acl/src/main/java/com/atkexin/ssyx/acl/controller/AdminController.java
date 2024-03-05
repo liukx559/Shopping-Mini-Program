@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户管理 前端控制器
@@ -92,6 +93,21 @@ public class AdminController {
     @DeleteMapping("batchRemove")
     public Result batchRemove(@RequestBody List<Long> idList) {
         adminService.removeByIds(idList);
+        return Result.ok(null);
+    }
+
+    @ApiOperation(value = "根据用户id查询角色")
+    @GetMapping("/toAssign/{adminId}")//与url一致
+    public Result toAssign(@PathVariable Long adminId)
+    {
+      Map<String,Object> map=roleService.getRoleByadminId(adminId);
+      return Result.ok(map);
+    }
+    @ApiOperation(value = "修改用户角色")
+    @PostMapping("/doAssign")
+    public Result doAssign(@RequestParam Long adminId,@RequestParam List<Long> roleId)
+    {
+        roleService.assignAdminRole(adminId,roleId);
         return Result.ok(null);
     }
 }
