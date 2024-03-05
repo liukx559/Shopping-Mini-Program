@@ -16,7 +16,32 @@
 
 #### 6Dao接口
 就是Mapper.java,添加扫描到mapper
+## Nginx
+### 反向代理服务器：转发请求到不同的微服务模块端口。
+![img.png](img.png)
+http{
+改配置
+端口号
+路径
+}
+
+开始 nginx.exe
+
+结束 nginx.exe -s -stop
+
+
+### 负载均衡：
+
 ## SpringBoot
+
+### 代码生成器
+1依赖
+
+**2工具类**
+改：绝对路径+数据库+包名+表名
+### 手动抛出异常
+threw new 异常类。
+
 ### 注解
 @Repository是Spring框架中的注解，用于标注数据访问层（DAO）的类。它的作用是将数据访问层的类标识为Spring容器中的Bean对象，从而可以在其他地方方便地使用。
 ## 报错
@@ -31,3 +56,4 @@
 参考 https://www.codejava.net/java-se/jdbc/fix-error-public-key-retrieval-is-not-allowed 
 
 jdbc:mysql://localhost:3306/xxx?allowPublicKeyRetrieval=true&useSSL=false
+
