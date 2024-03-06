@@ -31,7 +31,10 @@ http{
 
 
 ### 负载均衡：
-
+## 阿里云OSS
+在上传图片的模块中，通过阿里云OSS对图片文件存储。
+阿里云对象存储 OSS（Object Storage Service）是一款海量、安全、低成本、高可靠的云存储服务，提供最高可达 99.995 % 的服务可用性。多种存储类型供选择，全面优化存储成本。
+记得先写pom.xml依赖文件。
 ## SpringBoot
 
 ### 代码生成器
@@ -44,6 +47,9 @@ threw new 异常类。
 
 ### 注解
 @Repository是Spring框架中的注解，用于标注数据访问层（DAO）的类。它的作用是将数据访问层的类标识为Spring容器中的Bean对象，从而可以在其他地方方便地使用。
+
+## 商品SKU管理
+SKU通俗来讲就是一个产品最小的出库单位。
 ## 报错
 ### If you want an embedded database (H2, HSQL or Derby), please put it on the classpath. 
 ![img.png](img/img.png)
@@ -57,3 +63,7 @@ threw new 异常类。
 
 jdbc:mysql://localhost:3306/xxx?allowPublicKeyRetrieval=true&useSSL=false
 
+### Nginx配置错误：connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream
+## Spring
+MultipartFile//一种类型得到上传的文件
+@Value{}//从配置文件中取值
