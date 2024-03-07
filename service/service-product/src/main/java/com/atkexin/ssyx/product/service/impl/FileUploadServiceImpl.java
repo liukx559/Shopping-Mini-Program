@@ -7,11 +7,13 @@ import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
 import com.atkexin.ssyx.product.service.FileUploadService;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.UUID;
 
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
@@ -23,8 +25,9 @@ public class FileUploadServiceImpl implements FileUploadService {
     @Value("${aliyun.keysecret}")
     private String keysecret;
     @Value("${aliyun.bucketname}")
-    private  String bucketName;
-    public void upload(MultipartFile file) throws Exception {
+    private String bucketName;
+
+    public String upload(MultipartFile file) throws Exception {
 
 
         // 从环境变量中获取访问凭证。运行本代码示例之前，请确保已设置环境变量OSS_ACCESS_KEY_ID和OSS_ACCESS_KEY_SECRET。
@@ -34,19 +37,29 @@ public class FileUploadServiceImpl implements FileUploadService {
 
 
         // 创建OSSClient实例。
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId,keysecret);
-
+        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, keysecret);
+        String url="";
         try {
             InputStream inputStream = file.getInputStream();//得到输入流
             // 创建PutObjectRequest对象。
             //objectName:上传文件路径+名称
             //get文件名称
-            String objectName=file.getOriginalFilename();
+            String objectName = file.getOriginalFilename();
+            //uuid值唯一？？
+            String uuid = UUID.randomUUID().toString().replace("-", " ");
+            objectName = uuid + objectName;
+            //上传文件分组处理2024/3/7/01.jpg
+            String timeUrl = new DateTime().toString("yyy/MM/dd");
+            objectName = timeUrl + objectName;
+
             PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, inputStream);
             putObjectRequest.setProcess("true");
             // 创建PutObject请求。
             PutObjectResult result = ossClient.putObject(putObjectRequest);
             System.out.println(result.getResponse().getUri());
+            url = result.getResponse().getUri();
+
+
         } catch (OSSException oe) {
             System.out.println("Caught an OSSException, which means your request made it to OSS, "
                     + "but was rejected with an error response for some reason.");
@@ -64,5 +77,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 ossClient.shutdown();
             }
         }
+        return url;
     }
 }
+

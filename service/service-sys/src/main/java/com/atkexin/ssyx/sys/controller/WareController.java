@@ -30,7 +30,7 @@ public class WareController {
     private WareService wareService;
 
     @ApiOperation(value = "获取全部仓库")
-    @GetMapping("findAllList/")
+    @GetMapping("findAllList")
     public Result findAllList() {
         return Result.ok(wareService.list());
     }

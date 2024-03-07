@@ -64,6 +64,9 @@ SKU通俗来讲就是一个产品最小的出库单位。
 jdbc:mysql://localhost:3306/xxx?allowPublicKeyRetrieval=true&useSSL=false
 
 ### Nginx配置错误：connect() failed (10061: No connection could be made because the target machine actively refused it) while connecting to upstream
+微服务要同时启动！！！
+### requset url 有数据,前端没有
+要在Controller上配置跨域
 ## Spring
 MultipartFile//一种类型得到上传的文件
 @Value{}//从配置文件中取值
