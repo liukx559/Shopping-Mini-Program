@@ -11,7 +11,7 @@ public enum ActivityType {
     @EnumValue
     private Integer code ;
     private String comment ;
-
+    ActivityType(){}
     ActivityType(Integer code, String comment ){
         this.code=code;
         this.comment=comment;

@@ -1,5 +1,5 @@
 server:
-  port: 8208
+  port: 8204
 feign:
   sentinel:
     enabled: true
@@ -13,9 +13,9 @@ spring:
     allow-bean-definition-overriding: true #当遇到同样名字的时候，是否允许覆盖注册
   elasticsearch:
     rest:
-      uris: http://localhost:9200 #搜索引擎配置
+      uris: http://localhost:9200
   rabbitmq:
-    host: 192.168.197.128
+    host: 192.168.40.128
     port: 5672
     username: guest
     password: guest

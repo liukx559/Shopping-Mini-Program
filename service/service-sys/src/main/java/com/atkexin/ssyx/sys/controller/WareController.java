@@ -23,7 +23,7 @@ import javax.annotation.Resource;
 @Api(value = "Ware管理", tags = "Ware管理")
 @RestController
 @RequestMapping(value="/admin/sys/ware")
-@CrossOrigin //跨域
+
 public class WareController {
 
     @Resource

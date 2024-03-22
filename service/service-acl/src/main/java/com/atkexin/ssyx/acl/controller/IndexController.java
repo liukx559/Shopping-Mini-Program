@@ -10,7 +10,6 @@ import java.util.Map;
 
 @RestController//描述控制层(Controller)并返回JSON数据类型，但不会再执行配置的视图解析器，也不会返回给jsp页面，返回值就是return里的内容。
 @RequestMapping("/admin/acl/index/")//接口地址//通过"/xxx"来指定控制器可以处理哪些URL请求
-@CrossOrigin
 @Api(tags = "登录接口")
 public class IndexController {
     //login接口

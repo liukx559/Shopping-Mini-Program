@@ -1,6 +1,7 @@
 package com.atkexin.ssyx.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
 @Getter
@@ -10,6 +11,7 @@ public enum CouponType {
 
     @EnumValue
     private Integer code;
+    @JsonValue
     private String comment ;
 
     CouponType(Integer code, String comment ){

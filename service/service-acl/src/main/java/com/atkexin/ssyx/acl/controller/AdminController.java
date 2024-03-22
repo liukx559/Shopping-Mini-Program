@@ -23,7 +23,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin/acl/user")
 @Api(tags = "用户管理")
-@CrossOrigin //跨域
 public class AdminController {
 //    @Autowired如果找到了与注入对象类型匹配的Bean对象，则会将其注入到对应的属性或构造方法参数中。如果找不到匹配的Bean对象，则会抛出异常。
     @Autowired

@@ -8,8 +8,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 //@SpringBootApplication(exclude = { DataSourceAutoConfiguration.class})
 @EnableDiscoveryClient
 @SpringBootApplication
-//@SpringBootApplication
-//@MapperScan("com.atkexin.ssyx.*.mapper")
 public class ServiceAclApplication {
 
     public static void main(String[] args) {

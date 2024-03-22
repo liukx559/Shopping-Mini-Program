@@ -1,4 +1,5 @@
 package com.atkexin.ssyx.product.service;
+
 import com.atkexin.ssyx.model.product.Category;
 import com.atkexin.ssyx.vo.product.CategoryQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -18,4 +19,8 @@ public interface CategoryService extends IService<Category> {
     IPage<com.atkexin.ssyx.model.product.Category> selectPage(Page<Category> pageParam, CategoryQueryVo categoryQueryVo);
 
     Object findAllList();
+
+
+
+    ;
 }

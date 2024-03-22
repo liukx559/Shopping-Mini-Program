@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Api(tags = "区域接口")
 @RestController
 @RequestMapping("/admin/sys/region")
-@CrossOrigin //跨域
+
 public class RegionController {
 
     @Resource

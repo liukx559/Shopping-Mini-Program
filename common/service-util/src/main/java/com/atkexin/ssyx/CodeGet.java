@@ -19,7 +19,7 @@ public class CodeGet {
         // 2、全局配置
         // 全局配置
         GlobalConfig gc = new GlobalConfig();
-        gc.setOutputDir("C:\\Users\\82419\\IdeaProjects\\kexinyouxuan-parent\\service\\service-product"+"/src/main/java");
+        gc.setOutputDir("C:\\Users\\82419\\IdeaProjects\\kexinyouxuan-parent\\service\\service-activity"+"/src/main/java");
 
         gc.setServiceName("%sService");	//去掉Service接口的首字母I
         gc.setAuthor("atkexin");
@@ -28,7 +28,7 @@ public class CodeGet {
 
         // 3、数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
-        dsc.setUrl("jdbc:mysql://localhost:3306/shequ-product?serverTimezone=GMT%2B8&useSSL=false");
+        dsc.setUrl("jdbc:mysql://localhost:3306/shequ-activity?serverTimezone=GMT%2B8&useSSL=false");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("root");
         dsc.setPassword("root");
@@ -38,7 +38,7 @@ public class CodeGet {
         // 4、包配置
         PackageConfig pc = new PackageConfig();
         pc.setParent("com.atkexin.ssyx");
-        pc.setModuleName("product"); //模块名
+        pc.setModuleName("activity"); //模块名
         pc.setController("controller");
         pc.setService("service");
         pc.setMapper("mapper");
@@ -47,19 +47,21 @@ public class CodeGet {
         // 5、策略配置
         StrategyConfig strategy = new StrategyConfig();
 
-        strategy.setInclude("attr");
-        strategy.setInclude("attr_group");
-        strategy.setInclude("category");
-        strategy.setInclude("comment");
-        strategy.setInclude("comment_replay");
-        strategy.setInclude("mq_repeat_record");
-        strategy.setInclude("region_ware");
-        strategy.setInclude("sku_detail");
-        strategy.setInclude("sku_detail");
+        strategy.setInclude("activity_info");
+        strategy.setInclude("activity_rule");
+        strategy.setInclude("activity_sku");
+        strategy.setInclude("coupon_info");
+        strategy.setInclude("coupon_info_1");
+        strategy.setInclude("coupon_range");
+        strategy.setInclude("coupon_use");
+        strategy.setInclude("home_subject");
+        strategy.setInclude("home_subject_sku");
+        strategy.setInclude("seckill");
+        strategy.setInclude("seckill_sku");
+        strategy.setInclude("seckill_sku_notice");
+        strategy.setInclude("seckill_time");
         strategy.setInclude("sku_info");
-        strategy.setInclude("sku_poster");
-        strategy.setInclude("sku_stock_history");
-        strategy.setInclude("ware");
+
 
         strategy.setNaming(NamingStrategy.underline_to_camel);//数据库表映射到实体的命名策略
 

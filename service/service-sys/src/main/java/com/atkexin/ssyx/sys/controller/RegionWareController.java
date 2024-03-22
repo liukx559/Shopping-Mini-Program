@@ -17,8 +17,8 @@ import javax.annotation.Resource;
 @Api(value = "RegionWare管理", tags = "RegionWare管理")
 @RestController
 @RequestMapping(value="/admin/sys/regionWare")
-@CrossOrigin //跨域
-@SuppressWarnings({"unchecked", "rawtypes"})
+
+
 public class RegionWareController {
 
     @Resource

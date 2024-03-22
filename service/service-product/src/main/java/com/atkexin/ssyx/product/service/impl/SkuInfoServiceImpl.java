@@ -5,6 +5,8 @@ import com.atkexin.ssyx.model.product.SkuAttrValue;
 import com.atkexin.ssyx.model.product.SkuImage;
 import com.atkexin.ssyx.model.product.SkuInfo;
 import com.atkexin.ssyx.model.product.SkuPoster;
+import com.atkexin.ssyx.mq.constant.MqConst;
+import com.atkexin.ssyx.mq.service.RabbitService;
 import com.atkexin.ssyx.product.mapper.SkuInfoMapper;
 import com.atkexin.ssyx.product.service.SkuAttrValueService;
 import com.atkexin.ssyx.product.service.SkuImageService;
@@ -36,6 +38,14 @@ import java.util.List;
 @Service
 public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         implements SkuInfoService {
+    @Autowired
+    private SkuPosterService skuPosterService;
+
+    @Autowired
+    private SkuImageService skuImagesService;
+
+    @Autowired
+    private SkuAttrValueService skuAttrValueService;
 
     //获取sku分页列表
     @Override
@@ -59,14 +69,7 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         IPage<SkuInfo> skuInfoPage = baseMapper.selectPage(pageParam, wrapper);
         return skuInfoPage;
     }
-    @Autowired
-    private SkuPosterService skuPosterService;
 
-    @Autowired
-    private SkuImageService skuImagesService;
-
-    @Autowired
-    private SkuAttrValueService skuAttrValueService;
 
     //添加商品
     @Transactional(rollbackFor = {Exception.class})
@@ -179,6 +182,8 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         skuInfoUp.setCheckStatus(status);
         baseMapper.updateById(skuInfoUp);
     }
+    @Autowired
+    private RabbitService rabbitService;
 
     //商品上架
     @Transactional(rollbackFor = {Exception.class})
@@ -190,13 +195,17 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
             skuInfoUp.setId(skuId);
             skuInfoUp.setPublishStatus(1);
             baseMapper.updateById(skuInfoUp);
-            //TODO 商品上架 后续会完善：发送mq消息更新es数据
+            //商品上架 后续会完善：发送mq消息更新es数据
+            rabbitService.sendMessage(MqConst.EXCHANGE_GOODS_DIRECT, MqConst.ROUTING_GOODS_UPPER, skuId);
+
+
         } else {
             SkuInfo skuInfoUp = new SkuInfo();
             skuInfoUp.setId(skuId);
             skuInfoUp.setPublishStatus(0);
             baseMapper.updateById(skuInfoUp);
-            //TODO 商品下架 后续会完善：发送mq消息更新es数据
+            //发送mq消息更新es数据
+            rabbitService.sendMessage(MqConst.EXCHANGE_GOODS_DIRECT,MqConst.ROUTING_GOODS_LOWER, skuId);
         }
     }
 
@@ -207,6 +216,19 @@ public class SkuInfoServiceImpl extends ServiceImpl<SkuInfoMapper, SkuInfo>
         skuInfoUp.setId(skuId);
         skuInfoUp.setIsNewPerson(status);
         baseMapper.updateById(skuInfoUp);
+    }
+
+    @Override
+    public List<SkuInfo> findSkuInfoList(List<Long> skuIdList) {
+        return this.listByIds(skuIdList);
+    }
+
+    //根据关键字获取sku列表
+    @Override
+    public List<SkuInfo> findSkuInfoByKeyword(String keyword) {
+        LambdaQueryWrapper<SkuInfo> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.like(SkuInfo::getSkuName, keyword);
+        return baseMapper.selectList(queryWrapper);
     }
 
     private SkuInfoVo getSkuInfoDB(Long skuId) {

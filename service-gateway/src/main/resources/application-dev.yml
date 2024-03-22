@@ -1,0 +1,51 @@
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      httpclient:
+        wiretap: true
+      httpserver:
+        wiretap: true
+      routes:
+        - id: service-acl
+          predicates:
+            - Path=/*/acl/**
+          uri: lb://service-acl
+        - id: service-sys
+          predicates:
+            - Path=/*/sys/**
+          uri: lb://service-sys
+        - id: service-product
+          predicates:
+            - Path=/*/product/**
+          uri: lb://service-product
+        - id: service-activity
+          predicates:
+            - Path=/*/activity/**
+          uri: lb://service-activity
+        - id: service-order
+          predicates:
+            - Path=/*/order/**
+          uri: lb://service-order
+        - id: service-payment
+          predicates:
+            - Path=/*/payment/**
+          uri: lb://service-payment
+        - id: service-user
+          predicates:
+            - Path=/*/user/**
+          uri: lb://service-user
+        - id: service-search
+          predicates:
+            - Path=/*/search/**
+          uri: lb://service-search
+        - id: service-home
+          predicates:
+            - Path=/*/home/**
+          uri: lb://service-home
+        - id: service-cart
+          predicates:
+            - Path=/*/cart/**
+          uri: lb://service-cart
