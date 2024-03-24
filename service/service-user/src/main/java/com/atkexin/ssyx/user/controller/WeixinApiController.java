@@ -1,6 +1,7 @@
 package com.atkexin.ssyx.user.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.atkexin.ssyx.common.auth.AuthContextHolder;
 import com.atkexin.ssyx.common.constant.RedisConst;
 import com.atkexin.ssyx.common.exception.SsyxException;
 import com.atkexin.ssyx.common.result.Result;
@@ -22,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+//TODO:小程序端报错backgroundfetch privacy fail {"errno":101,"errMsg":"private_getBackgroundFetchData:fail private_getBackgroundFetchData:fail:jsapi invalid request data"\
 @RestController
 @RequestMapping("/api/user/weixin")
 public class WeixinApiController {
@@ -104,5 +106,16 @@ public class WeixinApiController {
         //redisz中放入userLoginVo
         redisTemplate.opsForValue().set(RedisConst.USER_LOGIN_KEY_PREFIX + user.getId(), userLoginVo, RedisConst.USERKEY_TIMEOUT, TimeUnit.DAYS);
         return Result.ok(map);
+    }
+    @PostMapping("/auth/updateUser")
+    @ApiOperation(value = "更新用户昵称与头像")
+    public Result updateUser(@RequestBody User user) {
+        User user1 = userService.getById(AuthContextHolder.getUserId());//ThreadLocal中数据
+
+        //把昵称更新为微信用户
+        user1.setNickName(user.getNickName().replaceAll("[ue000-uefff]", "*"));
+        user1.setPhotoUrl(user.getPhotoUrl());
+        userService.updateById(user1);
+        return Result.ok(null);
     }
 }

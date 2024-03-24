@@ -155,6 +155,8 @@ SKU通俗来讲就是一个产品最小的出库单位。
 
 换个名字，获取登录用户的信息
 
+![img.png](img/img_18.png)
+
 ## 报错
 
 ### If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
