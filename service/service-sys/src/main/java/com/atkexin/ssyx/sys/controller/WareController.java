@@ -2,7 +2,9 @@ package com.atkexin.ssyx.sys.controller;
 
 
 import com.atkexin.ssyx.common.result.Result;
+import com.atkexin.ssyx.model.sys.Ware;
 import com.atkexin.ssyx.sys.service.WareService;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -34,5 +36,7 @@ public class WareController {
     public Result findAllList() {
         return Result.ok(wareService.list());
     }
+
+
 }
 

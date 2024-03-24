@@ -3,7 +3,9 @@ package com.atkexin.ssyx.sys.controller;
 
 import com.atkexin.ssyx.common.result.Result;
 import com.atkexin.ssyx.model.sys.RegionWare;
+import com.atkexin.ssyx.model.sys.Ware;
 import com.atkexin.ssyx.sys.service.RegionWareService;
+import com.atkexin.ssyx.sys.service.WareService;
 import com.atkexin.ssyx.vo.sys.RegionWareQueryVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -23,7 +25,8 @@ public class RegionWareController {
 
     @Resource
     private RegionWareService regionWareService;
-
+    @Resource
+    private WareService wareService;
     //开通区域列表
     @ApiOperation(value = "获取开通区域列表")
     @GetMapping("{page}/{limit}")
@@ -60,6 +63,13 @@ public class RegionWareController {
     public Result updateStatus(@PathVariable Long id,@PathVariable Integer status) {
         regionWareService.updateStatus(id, status);
         return Result.ok(null);
+    }
+    @ApiOperation(value = "根据id查仓库")
+    @GetMapping("get/{id}")
+    Long getWareId(Long regionId)
+    {
+        Ware ware = wareService.getById(regionId);
+        return ware.getId();
     }
 }
 

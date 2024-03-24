@@ -133,6 +133,28 @@ Elasticsearch索引的精髓：一切设计都是为了提高搜索的性能。
 
 SKU通俗来讲就是一个产品最小的出库单位。
 
+## 用户登录
+
+### token
+
+唯一标识，对标识编码、加密。
+
+登录状态+
+
+#### JWT
+
+生成token工具：对标识编码、加密
+
+公有
+
+私有
+
+签名
+
+### 登录拦截器
+
+换个名字，获取登录用户的信息
+
 ## 报错
 
 ### If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.
@@ -176,7 +198,6 @@ Nginx配置错误：connect() failed (10061: No connection could be made because
 ![img.png](img/img_16.png)
 
 这两个依赖都不要《scpoe》标签
-
 
 ###### 返回200，依旧不显示画面
 
