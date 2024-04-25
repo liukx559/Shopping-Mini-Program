@@ -151,6 +151,23 @@ SKU通俗来讲就是一个产品最小的出库单位。
 
 签名
 
+### 详情显示——多线程
+![img.png](img/img_19.png)
+![img.png](img.png)
+![img.png](img/img_20.png)
+![img.png](img/img_21.png)
+异步编程：completablefuture继承了future
++ 创建异步对象
+  + runAsync方法不支持返回值
+  + supplyAsync可以支持返回值
++ 计算完成时回调方法
+  + whenComplete：是执行当前任务的线程执行继续执行 whenComplete 的任务。 
+  + whenCompleteAsync：是执行把 whenCompleteAsync 这个任务继续提交给线程池来进行执行。
++ 串行化执行
+  + thenRun方法：只要上面的任务执行完成，就开始执行thenRun，只是处理完任务后，执行 thenRun的后续操作
++ 多任务组合
+  + allOf：等待所有任务完成 
+  + anyOf：只要有一个任务完成
 ### 登录拦截器
 
 换个名字，获取登录用户的信息
@@ -205,6 +222,28 @@ Nginx配置错误：connect() failed (10061: No connection could be made because
 
 去掉controller上的@crossorigin
 
+######  Cause: java.sql.SQLException: Incorrect integer value: 'USER' for column 'user_type' at row 1
+服了，去掉了枚举，UserType用了int
+###### Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'categoryApiController': Injection of resource dependencies failed; nested exception is org.springframework.beans.factory.BeanCreationException: Error creating bean with name 'com.atkexin.ssyx.product.client.ProductFeignClient': FactoryBean threw exception on object creation; nested exception is org.springframework.beans.factory.UnsatisfiedDependencyException: Error creating bean with name 'mybatisPlusConfig': Unsatisfied dependency expressed through field 'dataSource'; nested exception is org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'javax.sql.DataSource' available: expected at least 1 bean which qualifies as autowire candidate. Dependency annotations: {@org.springframework.beans.factory.annotation.Autowired(required=true)}
+报错提示
+```
+***************************
+APPLICATION FAILED TO START
+***************************
+
+Description:
+
+Field dataSource in com.atkexin.ssyx.common.config.MybatisPlusConfig required a bean of type 'javax.sql.DataSource' that could not be found.
+
+The injection point has the following annotations:
+	- @org.springframework.beans.factory.annotation.Autowired(required=true)
+
+The following candidates were found but could not be injected:
+	- Bean method 'dataSource' in 'JndiDataSourceAutoConfiguration' not loaded because @ConditionalOnProperty (spring.datasource.jndi-name) did not find property 'jndi-name'
+	- Bean method 'dataSource' in 'XADataSourceAutoConfiguration' not loaded because @ConditionalOnClass did not find required class 'javax.transaction.TransactionManager'```
+
+```
+mybatispuls配置类有误，重新赋值了一遍
 ## 架构
 
 ![image.png](img/img_17.png)

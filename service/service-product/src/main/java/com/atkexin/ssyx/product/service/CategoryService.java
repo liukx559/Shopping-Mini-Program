@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 商品三级分类 服务类
@@ -18,7 +20,7 @@ public interface CategoryService extends IService<Category> {
 
     IPage<com.atkexin.ssyx.model.product.Category> selectPage(Page<Category> pageParam, CategoryQueryVo categoryQueryVo);
 
-    Object findAllList();
+    List<Category> findAllList();
 
 
 

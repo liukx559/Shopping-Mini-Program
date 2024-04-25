@@ -10,7 +10,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/shequ-user?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://localhost:3306/shequ-user?characterEncoding=utf-8&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: root
 
@@ -18,11 +18,11 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   redis:
-    host: 192.168.40.128
+    host: 8.134.112.56
     port: 6379
+    password: 123456
     database: 0
     timeout: 1800000
-    password:
     lettuce:
       pool:
         max-active: 20 #最大连接数

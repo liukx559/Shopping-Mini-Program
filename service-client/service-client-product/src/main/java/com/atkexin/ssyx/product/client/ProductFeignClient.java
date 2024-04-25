@@ -14,6 +14,12 @@ import java.util.List;
 @FeignClient(name = "service-product")
 public interface ProductFeignClient {
 
+    @GetMapping("/api/product/inner/findNewPersonSkuInfoList")
+    public List<SkuInfo> findNewPersonSkuInfoList();
+
+    @GetMapping("/api/product/inner/findAllCategoryList")
+    public List<Category> findAllCategoryList();
+
     @GetMapping("/api/product/inner/getCategory/{categoryId}")
     public Category getCategory(@PathVariable(value = "categoryId") Long categoryId);
 

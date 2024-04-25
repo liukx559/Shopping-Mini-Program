@@ -4,6 +4,8 @@ package com.atkexin.ssyx.activity.mapper;
 import com.atkexin.ssyx.model.activity.ActivityInfo;
 import com.atkexin.ssyx.model.activity.ActivityRule;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import feign.Param;
+import org.mapstruct.Mapper;
 
 import java.util.List;
 
@@ -15,9 +17,12 @@ import java.util.List;
  * @author atkexin
  * @since 2024-03-14
  */
+@Mapper
 public interface ActivityInfoMapper extends BaseMapper<ActivityInfo> {
 
     List<Long> selectExistSkuIdList(List<Long> skuIdList);
 
-    List<ActivityRule> selectActivityRuleList(Long skuId);
+    List<ActivityRule> selectActivityRuleList(@Param("skuId")Long skuId);
+
+    List<ActivityRule> findActivityRule(Long skuId);
 }

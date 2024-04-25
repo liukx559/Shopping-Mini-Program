@@ -1,6 +1,6 @@
 package com.atkexin.ssyx.user.service;
 
-import com.atkexin.ssyx.enums.user.User;
+import com.atkexin.ssyx.model.user.User;
 import com.atkexin.ssyx.vo.user.LeaderAddressVo;
 import com.atkexin.ssyx.vo.user.UserLoginVo;
 import com.baomidou.mybatisplus.extension.service.IService;

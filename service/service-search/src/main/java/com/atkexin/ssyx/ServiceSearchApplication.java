@@ -18,7 +18,7 @@ import reactor.core.publisher.Mono;
 @EnableDiscoveryClient
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
 @EnableFeignClients(basePackages="com.atkexin.ssyx.product.client")
-@ComponentScan({"com.atkexin.ssyx.search.service", "com.atkexin.ssyx.search.api"})
+@ComponentScan({"com.atkexin.ssyx.search.*", "com.atkexin.ssyx.search.api"})
 @Configurable
 public class ServiceSearchApplication {
 

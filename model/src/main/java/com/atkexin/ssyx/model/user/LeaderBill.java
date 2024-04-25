@@ -1,4 +1,4 @@
-package com.atkexin.ssyx.enums.user;
+package com.atkexin.ssyx.model.user;
 
 import com.atkexin.ssyx.enums.BillType;
 import com.atkexin.ssyx.model.base.BaseEntity;

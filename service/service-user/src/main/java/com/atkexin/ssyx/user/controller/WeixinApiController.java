@@ -8,7 +8,7 @@ import com.atkexin.ssyx.common.result.Result;
 import com.atkexin.ssyx.common.result.ResultCodeEnum;
 import com.atkexin.ssyx.common.utils.JwtHelper;
 import com.atkexin.ssyx.enums.UserType;
-import com.atkexin.ssyx.enums.user.User;
+import com.atkexin.ssyx.model.user.User;
 import com.atkexin.ssyx.user.service.UserService;
 import com.atkexin.ssyx.utils.ConstantPropertiesUtil;
 import com.atkexin.ssyx.utils.HttpClientUtils;
@@ -19,11 +19,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import java.util.HashMap;
+import  java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-//TODO:小程序端报错backgroundfetch privacy fail {"errno":101,"errMsg":"private_getBackgroundFetchData:fail private_getBackgroundFetchData:fail:jsapi invalid request data"\
+//TODO: SQL: INSERT INTO user  ( user_type, photo_url, nick_name,     open_id,  is_new )  VALUES  ( ?, ?, ?,     ?,  ? )
+//### Cause: java.sql.SQLException: Incorrect integer value: 'USER' for column 'user_type' at row 1
+//; uncategorized SQLException; SQL state [HY000]; error code [1366]; Incorrect integer value: 'USER' for column 'user_type' at row 1; nested exception is java.sql.SQLException: Incorrect integer value: 'USER' for column 'user_type' at row 1
 @RestController
 @RequestMapping("/api/user/weixin")
 public class WeixinApiController {
@@ -85,9 +87,9 @@ public class WeixinApiController {
         if(null == user){
             user = new User();
             user.setOpenId(openId);
-            user.setNickName(openId);
+            user.setNickName("");
             user.setPhotoUrl("");
-            user.setUserType(UserType.USER);
+            user.setUserType(0);
             user.setIsNew(0);
             userService.save(user);
         }

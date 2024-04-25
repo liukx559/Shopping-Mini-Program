@@ -1,9 +1,9 @@
 package com.atkexin.ssyx.user.service.impl;
 
 import com.atkexin.ssyx.enums.UserType;
-import com.atkexin.ssyx.enums.user.Leader;
-import com.atkexin.ssyx.enums.user.User;
-import com.atkexin.ssyx.enums.user.UserDelivery;
+import com.atkexin.ssyx.model.user.Leader;
+import com.atkexin.ssyx.model.user.User;
+import com.atkexin.ssyx.model.user.UserDelivery;
 import com.atkexin.ssyx.user.mapper.LeaderMapper;
 import com.atkexin.ssyx.user.mapper.UserDeliveryMapper;
 import com.atkexin.ssyx.user.mapper.UserMapper;
@@ -76,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userLoginVo.setIsNew(user.getIsNew());
 
         //如果是团长获取当前前团长id与对应的仓库id
-        if(user.getUserType() == UserType.LEADER) {
+        if(user.getUserType() == 1) {
             LambdaQueryWrapper<Leader> queryWrapper = new LambdaQueryWrapper<>();
             queryWrapper.eq(Leader::getUserId, userId);
             queryWrapper.eq(Leader::getCheckStatus, 1);

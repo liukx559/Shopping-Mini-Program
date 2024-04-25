@@ -1,4 +1,4 @@
-package com.atkexin.ssyx.enums.user;
+package com.atkexin.ssyx.model.user;
 
 import com.atkexin.ssyx.enums.UserType;
 import com.atkexin.ssyx.model.base.BaseEntity;
@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.apache.ibatis.type.EnumTypeHandler;
 
 @Data
 @ApiModel(description = "User")
@@ -15,8 +16,8 @@ public class User extends BaseEntity {
 
 	private static final long serialVersionUID = 1L;
 
-	@TableField("user_type")
-	private UserType userType;
+	@TableField(value = "user_type")
+	private Integer userType;
 
 	@ApiModelProperty(value = "会员头像")
 	@TableField("photo_url")

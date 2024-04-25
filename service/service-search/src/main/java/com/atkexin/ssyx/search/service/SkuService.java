@@ -1,7 +1,12 @@
 
 package com.atkexin.ssyx.search.service;
 
+import com.atkexin.ssyx.model.search.SkuEs;
+import com.atkexin.ssyx.vo.search.SkuEsQueryVo;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.awt.print.Pageable;
 
 @Service
 public interface SkuService {
@@ -17,6 +22,8 @@ public interface SkuService {
      * @param skuId
      */
     void lowerSku(Long skuId);
+
+    Page<SkuEs> search(Pageable pageable, SkuEsQueryVo searchParamVo);
 }
 
 

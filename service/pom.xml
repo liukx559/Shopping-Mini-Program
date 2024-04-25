@@ -17,6 +17,7 @@
         <module>service-product</module>
         <module>service-search</module>
         <module>service-activity</module>
+        <module>service-home</module>
 
 
     </modules>
@@ -45,7 +46,6 @@
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.4.1</version>
         </dependency>
 
         <!--mysql-->

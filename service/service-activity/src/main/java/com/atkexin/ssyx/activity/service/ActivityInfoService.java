@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -28,6 +29,7 @@ public interface ActivityInfoService extends IService<ActivityInfo> {
 
     Object findSkuInfoByKeyword(String keyword);
 
-    //查询商品获取规则数据
-    List<ActivityRule> findActivityRule(Long skuId);
+    public List<ActivityRule> findActivityRule(Long skuId);
+
+    Map<Long, List<String>> findActivity(List<Long> skuIdList);
 }

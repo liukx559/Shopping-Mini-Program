@@ -15,7 +15,7 @@ spring:
     rest:
       uris: http://localhost:9200
   rabbitmq:
-    host: 192.168.40.128
+    host: 8.134.112.56
     port: 5672
     username: guest
     password: guest
@@ -27,11 +27,11 @@ spring:
         concurrency: 3
         acknowledge-mode: manual
   redis:
-    host: localhost
+    host: 8.134.112.56
     port: 6379
+    password: 123456
     database: 0
     timeout: 1800000
-    password:
     lettuce:
       pool:
         max-active: 20 #最大连接数

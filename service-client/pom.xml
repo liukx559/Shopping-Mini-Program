@@ -13,6 +13,8 @@
     <packaging>pom</packaging>
     <modules>
         <module>service-client-region</module>
+        <module>service-client-user</module>
+        <module>service-client-activity</module>
     </modules>
 
     <properties>
