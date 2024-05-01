@@ -15,6 +15,7 @@
         <module>service-client-region</module>
         <module>service-client-user</module>
         <module>service-client-activity</module>
+        <module>service-client-search</module>
     </modules>
 
     <properties>

@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  * 优惠券信息 服务类
@@ -25,4 +27,7 @@ public interface CouponInfoService extends IService<CouponInfo> {
     void saveCouponRule(CouponRuleVo couponRuleVo);
 
     Object findCouponByKeyword(String keyword);
+
+
+   List<CouponInfo> findCouponInfoList(long skuId, long userId);
 }

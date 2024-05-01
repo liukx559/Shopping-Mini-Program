@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 //@SpringBootApplication(exclude = DataSourceAutoConfiguration.class)//取消数据源自动配置
 @EnableDiscoveryClient
 @SpringBootApplication(exclude={DataSourceAutoConfiguration.class})
-@EnableFeignClients(basePackages="com.atkexin.ssyx.product.client")
+@EnableFeignClients
 @ComponentScan({"com.atkexin.ssyx.search.*", "com.atkexin.ssyx.search.api"})
 @Configurable
 public class ServiceSearchApplication {

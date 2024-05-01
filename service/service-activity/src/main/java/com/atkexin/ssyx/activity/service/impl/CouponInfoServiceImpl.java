@@ -21,6 +21,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+
+import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,13 +30,13 @@ import java.util.stream.Collectors;
 public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponInfo>
         implements CouponInfoService {
 
-    @Autowired
+    @Resource
     private CouponInfoMapper couponInfoMapper;
 
-    @Autowired
+    @Resource
     private CouponRangeMapper couponRangeMapper;
 
-    @Autowired
+    @Resource
     private CouponUseMapper couponUseMapper;
 
     @Autowired
@@ -134,5 +136,17 @@ public class CouponInfoServiceImpl extends ServiceImpl<CouponInfoMapper, CouponI
         QueryWrapper<CouponInfo> couponInfoQueryWrapper = new QueryWrapper<>();
         couponInfoQueryWrapper.like("coupon_name",keyword);
         return couponInfoMapper.selectList(couponInfoQueryWrapper);
+    }
+
+
+    @Override
+    public List<CouponInfo> findCouponInfoList(long skuId, long userId) {
+        //根据skuId获取skuInfo中的catagary
+        SkuInfo skuInfo = productFeignClient.getSkuInfo(skuId);
+
+        //根据skuId+userId+分类id查询优惠券
+        return baseMapper.selectCouponInfoList(skuId,skuInfo.getCategoryId(),userId);
+
+
     }
 }

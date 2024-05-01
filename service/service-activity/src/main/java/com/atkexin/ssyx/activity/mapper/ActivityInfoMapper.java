@@ -24,5 +24,5 @@ public interface ActivityInfoMapper extends BaseMapper<ActivityInfo> {
 
     List<ActivityRule> selectActivityRuleList(@Param("skuId")Long skuId);
 
-    List<ActivityRule> findActivityRule(Long skuId);
+
 }

@@ -2,6 +2,7 @@ package com.atkexin.ssyx.product.client;
 
 import com.atkexin.ssyx.model.product.Category;
 import com.atkexin.ssyx.model.product.SkuInfo;
+import com.atkexin.ssyx.vo.product.SkuInfoVo;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,5 +54,7 @@ public interface ProductFeignClient {
     @PostMapping("/api/product/inner/findCategoryList")
     List<Category> findAllList(@RequestBody List<Long> categoryIdList);
 
+    @GetMapping("/api/product/inner/inner/getSkuInfovo/{skuId}")
+    public SkuInfoVo getSkuInfovo(@PathVariable long skuId);
 
 }

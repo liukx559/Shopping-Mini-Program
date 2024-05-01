@@ -26,3 +26,15 @@ spring:
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+  rabbitmq:
+    host: 8.134.112.56
+    port: 5673
+    username: guest
+    password: guest
+    publisher-confirm-type: CORRELATED
+    publisher-returns: true
+    listener:
+      simple:
+        prefetch: 1
+        concurrency: 3
+        acknowledge-mode: manual

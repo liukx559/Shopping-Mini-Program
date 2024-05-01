@@ -31,5 +31,6 @@ public class RegionController {
     public Result findSkuInfoByKeyword(@PathVariable("keyword") String keyword) {
         return Result.ok(regionService.findRegionByKeyword(keyword));
     }
+
 }
 

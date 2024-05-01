@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 //TODO: 更改前端路径
 @Api(tags = "首页接口")
-@RequestMapping("api/home/")
+@RequestMapping("/api/home/")
 @RestController
 public class HomeApiController {
     @Autowired
@@ -29,4 +29,6 @@ public class HomeApiController {
         Long userId = AuthContextHolder.getUserId();//从ThreadLoCal中获取用户id
         return Result.ok(homeService.home(userId));
     }
+
+
 }

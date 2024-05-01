@@ -173,6 +173,8 @@ SKU通俗来讲就是一个产品最小的出库单位。
 换个名字，获取登录用户的信息
 
 ![img.png](img/img_18.png)
+## 购物车
+![img_1.png](img_1.png)
 
 ## 报错
 
@@ -219,8 +221,8 @@ Nginx配置错误：connect() failed (10061: No connection could be made because
 这两个依赖都不要《scpoe》标签
 
 ###### 返回200，依旧不显示画面
+去掉controller上的@crossorigin，是controller，不是启动类
 
-去掉controller上的@crossorigin
 
 ######  Cause: java.sql.SQLException: Incorrect integer value: 'USER' for column 'user_type' at row 1
 服了，去掉了枚举，UserType用了int

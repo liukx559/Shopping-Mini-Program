@@ -17,6 +17,7 @@
         <module>service-client</module>
         <module>service-client/service-client-product</module>
         <module>service-gateway</module>
+        <module>service/service-cart</module>
     </modules>
 
     <parent>

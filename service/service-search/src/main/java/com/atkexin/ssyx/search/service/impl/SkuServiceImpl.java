@@ -17,11 +17,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
+
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -36,10 +40,38 @@ public class SkuServiceImpl implements SkuService {
 
     @Autowired
     private SkuRepository skuRepository;
+
     @Autowired
     private ActivityFeignClient activityFeignClient;
 
 
+
+    //获取爆品商品
+    @Override
+    public List<SkuEs> findHotSkuList() {
+        Pageable pageable = (Pageable) PageRequest.of(0, 10);
+        return skuRepository.findByOrderByHotScoreDesc(pageable).getContent();
+    }
+    @Autowired
+    private RedisTemplate redisTemplate;
+    //更新商品热度、更新es的值
+    @Override
+    public void incrHotScore(long skuId) {
+        //1、商品被查看一次，更新一次es，es存磁盘。IO操作。es搜索快、更新不快
+        //2、redis实现，在redis中更新
+        //3、规则redis中的hotsorce达到阈值时才更新es
+        //4、redis类型：String，Zset(有序，不能重复)
+        String key="hotScore";
+        Double v = redisTemplate.opsForZSet().incrementScore(key, "skuId" + skuId, 1);
+        if(v%10==0){
+            Optional<SkuEs> byId = skuRepository.findById(skuId);
+            SkuEs skuEs=byId.get();
+            skuEs.setHotScore(Math.round(v));
+            skuRepository.save(skuEs);
+        }
+
+
+    }
 
     /**
      * 上架商品列表

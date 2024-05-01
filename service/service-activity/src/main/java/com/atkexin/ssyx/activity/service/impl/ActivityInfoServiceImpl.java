@@ -5,10 +5,12 @@ import com.atkexin.ssyx.activity.mapper.ActivityInfoMapper;
 import com.atkexin.ssyx.activity.mapper.ActivityRuleMapper;
 import com.atkexin.ssyx.activity.mapper.ActivitySkuMapper;
 import com.atkexin.ssyx.activity.service.ActivityInfoService;
+import com.atkexin.ssyx.activity.service.CouponInfoService;
 import com.atkexin.ssyx.enums.ActivityType;
 import com.atkexin.ssyx.model.activity.ActivityInfo;
 import com.atkexin.ssyx.model.activity.ActivityRule;
 import com.atkexin.ssyx.model.activity.ActivitySku;
+import com.atkexin.ssyx.model.activity.CouponInfo;
 import com.atkexin.ssyx.model.product.SkuInfo;
 import com.atkexin.ssyx.product.client.ProductFeignClient;
 import com.atkexin.ssyx.vo.activity.ActivityRuleVo;
@@ -22,10 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,6 +41,8 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
 
     @Autowired
     private ProductFeignClient productFeignClient;
+    @Autowired
+    private CouponInfoService couponInfoService;
 
     //优惠活动列表方法
     @Override
@@ -137,7 +138,7 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
         skuIdList.forEach(skuId -> {
             //根据skuId进行查询，查询sku对应活动里面规则列表
             List<ActivityRule> activityRuleList =
-                    baseMapper.findActivityRule(skuId);
+                    baseMapper.selectActivityRuleList(skuId);
             //数据封装，规则名称
             if(!CollectionUtils.isEmpty(activityRuleList)) {
                 List<String> ruleList = new ArrayList<>();
@@ -150,6 +151,22 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
         });
         return result;
     }
+
+    @Override
+    public Map<String, Object> findActivityAndCoupon(long skuId, long userId) {
+        Map<String, Object> activityRuleList = this.findActivityRuleList(skuId);
+        //skuid活动
+        List<CouponInfo>couponInfoList= couponInfoService.findCouponInfoList(skuId,userId);
+        //skuid+userid优惠券
+        //map
+        Map<String, Object> map=new HashMap<>();
+        map.put("couponInfoList",couponInfoList);
+        map.putAll(activityRuleList);
+
+        return map;
+    }
+
+
 
     //构造规则名称的方法
     private String getRuleDesc(ActivityRule activityRule) {

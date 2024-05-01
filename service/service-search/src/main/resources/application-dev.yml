@@ -16,7 +16,7 @@ spring:
       uris: http://localhost:9200
   rabbitmq:
     host: 8.134.112.56
-    port: 5672
+    port: 5673
     username: guest
     password: guest
     publisher-confirm-type: CORRELATED

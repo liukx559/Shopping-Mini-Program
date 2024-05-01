@@ -49,3 +49,8 @@ spring:
           predicates:
             - Path=/*/cart/**
           uri: lb://service-cart
+    nacos:
+      discovery:
+        server-addr: 8.134.112.56:8848 # Nacos服务地址和端口
+      config:
+        server-addr: 8.134.112.56:8848 # 如果还使用Nacos作为配置中心，也需要配置这个地址

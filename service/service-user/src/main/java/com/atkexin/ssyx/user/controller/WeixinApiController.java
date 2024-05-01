@@ -105,6 +105,8 @@ public class WeixinApiController {
 //            map.put("leader", leader);
 //        }
         UserLoginVo userLoginVo = this.userService.getUserLoginVo(user.getId());
+        AuthContextHolder.setUserId(user.getId());
+        AuthContextHolder.setUserLoginVo(userLoginVo);
         //redisz中放入userLoginVo
         redisTemplate.opsForValue().set(RedisConst.USER_LOGIN_KEY_PREFIX + user.getId(), userLoginVo, RedisConst.USERKEY_TIMEOUT, TimeUnit.DAYS);
         return Result.ok(map);

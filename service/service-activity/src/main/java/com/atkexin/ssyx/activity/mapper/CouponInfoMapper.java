@@ -3,6 +3,9 @@ package com.atkexin.ssyx.activity.mapper;
 
 import com.atkexin.ssyx.model.activity.CouponInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import io.lettuce.core.dynamic.annotation.Param;
+
+import java.util.List;
 
 /**
  * <p>
@@ -14,4 +17,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface CouponInfoMapper extends BaseMapper<CouponInfo> {
 
+    List<CouponInfo> selectCouponInfoList(@Param("skuId") long skuId, @Param("categoryId")Long categoryId, @Param(" userId") long userId);
 }
