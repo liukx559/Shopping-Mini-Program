@@ -1,13 +1,17 @@
 package com.atkexin.ssyx.cart.controller;
+import com.atkexin.ssyx.activity.client.ActivityFeignClient;
 import com.atkexin.ssyx.common.auth.AuthContextHolder;
 import com.atkexin.ssyx.common.result.Result;
 import com.atkexin.ssyx.cart.service.CartInfoService;
+import com.atkexin.ssyx.model.order.CartInfo;
+import com.atkexin.ssyx.vo.order.OrderConfirmVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
@@ -62,5 +66,37 @@ public class CartApiController {
         Long userId = AuthContextHolder.getUserId();
         cartInfoService.batchDeleteCart(skuIdList, userId);
         return Result.ok(null);
+    }
+    @Resource
+    private ActivityFeignClient activityFeignClient;
+
+    /**
+     * 查询购物车列表
+     *
+     * @param request
+     * @return
+     */
+    @GetMapping("cartList")
+    public Result cartList(HttpServletRequest request) {
+        // 获取用户Id
+        Long userId = AuthContextHolder.getUserId();
+        List<CartInfo> cartInfoList = cartInfoService.getCartList(userId);
+        return Result.ok(cartInfoList);
+    }
+
+    /**
+     * 查询带优惠卷的购物车
+     *
+     * @param
+     * @return
+     */
+    @GetMapping("activityCartList")
+    public Result activityCartList() {
+        // 获取用户Id
+        Long userId = AuthContextHolder.getUserId();
+        List<CartInfo> cartInfoList = cartInfoService.getCartList(userId);
+
+        OrderConfirmVo orderTradeVo = activityFeignClient.findCartActivityAndCoupon(cartInfoList, userId);
+        return Result.ok(orderTradeVo);
     }
 }

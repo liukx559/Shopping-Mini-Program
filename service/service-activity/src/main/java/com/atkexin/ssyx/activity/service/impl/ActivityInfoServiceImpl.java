@@ -11,9 +11,13 @@ import com.atkexin.ssyx.model.activity.ActivityInfo;
 import com.atkexin.ssyx.model.activity.ActivityRule;
 import com.atkexin.ssyx.model.activity.ActivitySku;
 import com.atkexin.ssyx.model.activity.CouponInfo;
+import com.atkexin.ssyx.model.order.CartInfo;
 import com.atkexin.ssyx.model.product.SkuInfo;
 import com.atkexin.ssyx.product.client.ProductFeignClient;
 import com.atkexin.ssyx.vo.activity.ActivityRuleVo;
+import com.atkexin.ssyx.vo.order.CartInfoVo;
+import com.atkexin.ssyx.vo.order.OrderConfirmVo;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -165,7 +170,151 @@ public class ActivityInfoServiceImpl extends ServiceImpl<ActivityInfoMapper, Act
 
         return map;
     }
+    //获取购物车活动满足条件的优惠券和信息
+    @Override
+    public OrderConfirmVo findCartActivityAndCoupon(List<CartInfo> cartInfoList,
+                                                    Long userId) {
+        //1.参与满减活动优惠活动信息
 
+        List<CartInfoVo> carInfoVoList = this.findCartActivityList(cartInfoList);
+        //1.1创建list集合
+        //1.2获取购物车中购物项的skuid的满减活动id，一次商品只能参与一个满减活动
+        //1.2.1 通过从activity_sku表中查activityid（set）
+        //1.2.2根据activityid分组（stream流），返回Map<Long,Set<Long>>
+        //1.3获取满减活动id对应的规则
+        //1.3.1根据activityid，查activity_rule中的ruleid（in）
+        //1.3.2根据activityid分组（stream流），返回Map<Long,List<rule>>
+        //1.4遍历1.2.2中的Map<Long,Set<Long>>
+        //1.5遍历参数List<CartInfo> cartInfoList获取参加活动的购物项
+        //1.6总数量、总金额
+        //1.7分装CartInfo
+        //1.8没有参加活动的购物项
+        BigDecimal activityReduceAmount = carInfoVoList.stream()
+                .filter(carInfoVo -> null != carInfoVo.getActivityRule())
+                .map(carInfoVo -> carInfoVo.getActivityRule().getReduceAmount())
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        //购物车可使用的优惠券列表
+        List<CouponInfo> couponInfoList = couponInfoService.findCartCouponInfo(cartInfoList, userId);
+        //优惠券可优惠的总金额，一次购物只能使用一张优惠券
+        BigDecimal couponReduceAmount = new BigDecimal("0");
+        if(!CollectionUtils.isEmpty(couponInfoList)) {
+            couponReduceAmount = couponInfoList.stream()
+                    .filter(couponInfo -> couponInfo.getIsOptimal().intValue() == 1)
+                    .map(couponInfo -> couponInfo.getAmount())
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+        }
+
+        //购物车总金额
+        BigDecimal carInfoTotalAmount = cartInfoList.stream()
+                .filter(cartInfo -> cartInfo.getIsChecked() == 1)
+                .map(cartInfo -> cartInfo.getCartPrice().multiply(new BigDecimal(cartInfo.getSkuNum())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        //购物车原始总金额
+        BigDecimal originalTotalAmount = cartInfoList.stream()
+                .filter(cartInfo -> cartInfo.getIsChecked() == 1)
+                .map(cartInfo -> cartInfo.getCartPrice().multiply(new BigDecimal(cartInfo.getSkuNum())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        //最终总金额
+        BigDecimal totalAmount = originalTotalAmount.subtract(activityReduceAmount).subtract(couponReduceAmount);
+
+        OrderConfirmVo orderTradeVo = new OrderConfirmVo();
+        orderTradeVo.setCarInfoVoList(carInfoVoList);
+        orderTradeVo.setActivityReduceAmount(activityReduceAmount);
+        orderTradeVo.setCouponInfoList(couponInfoList);
+        orderTradeVo.setCouponReduceAmount(couponReduceAmount);
+        orderTradeVo.setOriginalTotalAmount(originalTotalAmount);
+        orderTradeVo.setTotalAmount(totalAmount);
+        return orderTradeVo;
+    }
+
+    @Override
+    public List<CartInfoVo> findCartActivityList(List<CartInfo> cartInfoList) {
+        List<CartInfoVo> carInfoVoList = new ArrayList<>();
+
+        //第一步：把购物车里面相同活动的购物项汇总一起
+        //获取skuId列表
+        List<Long> skuIdList = cartInfoList.stream().map(CartInfo::getSkuId).collect(Collectors.toList());
+        //获取skuId列表对应的全部促销规则
+        List<ActivitySku> activitySkuList = baseMapper.selectCartActivityList(skuIdList);
+        //根据活动分组，取活动对应的skuId列表，即把购物车里面相同活动的购物项汇总一起，凑单使用
+        Map<Long, Set<Long>> activityIdToSkuIdListMap = activitySkuList.stream()
+                .collect(
+                        Collectors.groupingBy(
+                                ActivitySku::getActivityId,
+                                Collectors.mapping(ActivitySku::getSkuId, Collectors.toSet())
+                        )
+                );
+
+        //第二步：获取活动对应的促销规则
+        //获取购物车对应的活动id
+        Set<Long> activityIdSet = activitySkuList.stream().map(ActivitySku::getActivityId).collect(Collectors.toSet());
+        Map<Long, List<ActivityRule>> activityIdToActivityRuleListMap = new HashMap<>();
+        if(!CollectionUtils.isEmpty(activityIdSet)) {
+            LambdaQueryWrapper<ActivityRule> queryWrapper = new LambdaQueryWrapper<>();
+            queryWrapper.orderByDesc(ActivityRule::getConditionAmount, ActivityRule::getConditionNum);
+            queryWrapper.in(ActivityRule::getActivityId, activityIdSet);
+            List<ActivityRule> activityRuleList = activityRuleMapper.selectList(queryWrapper);
+            //按活动Id分组，获取活动对应的规则
+            activityIdToActivityRuleListMap = activityRuleList.stream().collect(Collectors.groupingBy(activityRule -> activityRule.getActivityId()));
+        }
+
+        //第三步：根据活动汇总购物项，相同活动的购物项为一组显示在页面，并且计算最优优惠金额
+        //记录有活动的购物项skuId
+        Set<Long> activitySkuIdSet = new HashSet<>();
+        if(!CollectionUtils.isEmpty(activityIdToSkuIdListMap)) {
+            Iterator<Map.Entry<Long, Set<Long>>> iterator = activityIdToSkuIdListMap.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Long, Set<Long>> entry = iterator.next();
+                Long activityId = entry.getKey();
+                //当前活动对应的购物项skuId列表
+                Set<Long> currentActivitySkuIdSet = entry.getValue();
+                //当前活动对应的购物项列表
+                List<CartInfo> currentActivityCartInfoList = cartInfoList.stream().filter(cartInfo -> currentActivitySkuIdSet.contains(cartInfo.getSkuId())).collect(Collectors.toList());
+
+                //当前活动的总金额
+                BigDecimal activityTotalAmount = this.computeTotalAmount(currentActivityCartInfoList);
+                //当前活动的购物项总个数
+                Integer activityTotalNum = this.computeCartNum(currentActivityCartInfoList);
+                //计算当前活动对应的最优规则
+                //活动当前活动对应的规则
+                List<ActivityRule> currentActivityRuleList = activityIdToActivityRuleListMap.get(activityId);
+                ActivityType activityType = currentActivityRuleList.get(0).getActivityType();
+                ActivityRule optimalActivityRule = null;
+                if (activityType == ActivityType.FULL_REDUCTION) {
+                    optimalActivityRule = this.computeFullReduction(activityTotalAmount, currentActivityRuleList);
+                } else {
+                    optimalActivityRule = this.computeFullDiscount(activityTotalNum, activityTotalAmount, currentActivityRuleList);
+                }
+
+                //同一活动对应的购物项列表与对应优化规则
+                CartInfoVo carInfoVo = new CartInfoVo();
+                carInfoVo.setCartInfoList(currentActivityCartInfoList);
+                carInfoVo.setActivityRule(optimalActivityRule);
+                carInfoVoList.add(carInfoVo);
+                //记录
+                activitySkuIdSet.addAll(currentActivitySkuIdSet);
+            }
+        }
+
+        //第四步：无活动的购物项，每一项一组
+        skuIdList.removeAll(activitySkuIdSet);
+        if(!CollectionUtils.isEmpty(skuIdList)) {
+            //获取skuId对应的购物项
+            Map<Long, CartInfo> skuIdToCartInfoMap = cartInfoList.stream().collect(Collectors.toMap(CartInfo::getSkuId, CartInfo->CartInfo));
+            for(Long skuId : skuIdList) {
+                CartInfoVo carInfoVo = new CartInfoVo();
+                carInfoVo.setActivityRule(null);
+                List<CartInfo> currentCartInfoList = new ArrayList<>();
+                currentCartInfoList.add(skuIdToCartInfoMap.get(skuId));
+                carInfoVo.setCartInfoList(currentCartInfoList);
+                carInfoVoList.add(carInfoVo);
+            }
+        }
+        return carInfoVoList;
+    }
 
 
     //构造规则名称的方法

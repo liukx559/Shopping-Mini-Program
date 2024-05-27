@@ -3,6 +3,7 @@ package com.atkexin.ssyx.activity.mapper;
 
 import com.atkexin.ssyx.model.activity.ActivityInfo;
 import com.atkexin.ssyx.model.activity.ActivityRule;
+import com.atkexin.ssyx.model.activity.ActivitySku;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import feign.Param;
 import org.mapstruct.Mapper;
@@ -25,4 +26,5 @@ public interface ActivityInfoMapper extends BaseMapper<ActivityInfo> {
     List<ActivityRule> selectActivityRuleList(@Param("skuId")Long skuId);
 
 
+    List<ActivitySku> selectCartActivityList(List<Long> skuIdList);
 }

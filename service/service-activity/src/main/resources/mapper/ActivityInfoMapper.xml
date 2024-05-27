@@ -4,6 +4,7 @@
 
     <resultMap id="ActivityRuleMap" type="com.atkexin.ssyx.model.activity.ActivityRule" autoMapping="true"></resultMap>
     <resultMap id="CouponInfoMap" type="com.atkexin.ssyx.model.activity.CouponInfo" autoMapping="true"></resultMap>
+    <resultMap id="ActivitySkuMap" type="com.atkexin.ssyx.model.activity.ActivitySku" autoMapping="true"></resultMap>
     <select id="selectCouponInfoList" resultMap="CouponInfoMap">
         select
             info.id,info.coupon_type,info.coupon_name,info.amount,info.condition_amount,info.start_time,info.end_time,info.range_type,info.range_desc,info.publish_count,info.per_limit,info.use_count,info.receive_count,info.expire_time,info.publish_status,info.create_time,info.update_time,info.is_deleted
@@ -48,6 +49,19 @@
             sku.sku_id = #{skuId}
           and now() between info.start_time and info.end_time
         order by rule.condition_amount desc, rule.condition_num desc
+    </select>
+    <select id="selectCartActivityList" resultMap="ActivitySkuMap">
+    select info.id as activityId,
+           sku.sku_id as skuId
+    from activity_info info
+    inner join activity_sku sku  on sku.activity_id=info.id
+    <where>
+        sku.sku_id in 
+        <foreach collection="skuIdList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+    </where>
+    and now() between info.start_time and info.end_time
     </select>
 
 </mapper>

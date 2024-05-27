@@ -6,7 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 
 import javax.annotation.Resource;
-//拦截器路径配置
+//拦截器路径配置类
 @Configuration
 public class LoginMvcConfigurerAdapter extends WebMvcConfigurationSupport {
 

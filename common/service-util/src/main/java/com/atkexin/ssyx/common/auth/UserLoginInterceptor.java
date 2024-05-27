@@ -20,8 +20,8 @@ public class UserLoginInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        this.initUserLoginVo(request);
-        return true;
+        this.initUserLoginVo(request);//已经登陆
+        return true;// 如果返回false，则请求将被拦截，不会继续执行后续的处理器
     }
 
     private void initUserLoginVo(HttpServletRequest request){

@@ -1,5 +1,7 @@
 package com.atkexin.ssyx.activity.client;
 
+import com.atkexin.ssyx.model.order.CartInfo;
+import com.atkexin.ssyx.vo.order.OrderConfirmVo;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
@@ -19,4 +21,7 @@ public interface ActivityFeignClient {
     @GetMapping("/api/activity/inner/findActivityAndCoupon/{skuId}{userId}")
     public Map<String, Object> findActivityAndCoupon(@PathVariable long skuId, @PathVariable long userId) ;
 
+    default OrderConfirmVo findCartActivityAndCoupon(List<CartInfo> cartInfoList, Long userId) {
+        return null;
+    }
 }

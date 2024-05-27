@@ -3,6 +3,7 @@ package com.atkexin.ssyx.home.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.LinkedList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -29,4 +30,5 @@ public class ThreadPoolConfig {
         );
         return threadPoolExecutor;
     }
+
 }

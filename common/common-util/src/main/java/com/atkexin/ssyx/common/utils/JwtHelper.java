@@ -21,7 +21,7 @@ public class JwtHelper {
         return token;
     }
 
-    //得到UserId
+    //得到UserId//验证
     public static Long getUserId(String token) {
         if(com.alibaba.nacos.api.utils.StringUtils.isEmpty(token)) return null;
 
@@ -31,7 +31,7 @@ public class JwtHelper {
         return userId.longValue();
         // return 1L;
     }
-
+//得到Username//验证
     public static String getUserName(String token) {
         if(StringUtils.isEmpty(token)) return "";
 
@@ -44,10 +44,4 @@ public class JwtHelper {
         //jwttoken无需删除，客户端扔掉即可。
     }
 
-    public static void main(String[] args) {
-        String token = JwtHelper.createToken(7L, "admin");
-        System.out.println(token);
-        System.out.println(JwtHelper.getUserId(token));
-        System.out.println(JwtHelper.getUserName(token));
-    }
 }
