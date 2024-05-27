@@ -31,5 +31,5 @@ spring:
         min-idle: 0     #最小空闲
 wx:
   open:
-    app_id: wxec4375bb55c46f01
-    app_secret: 26ad9e59b433198c7afc08a7b089b1c0
+    app_id: 
+    app_secret:
